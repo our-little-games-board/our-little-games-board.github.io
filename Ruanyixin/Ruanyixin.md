@@ -12,7 +12,7 @@
 或者扫码快速进入游戏：
 
 <p align="center">
-  <img src="Ruanyixin/https17750977756.github.iowll.png" alt="游戏二维码" width="180" />
+  <img src="https17750977756.github.iowll.png" alt="游戏二维码" width="180" />
 </p>
 
 ---
