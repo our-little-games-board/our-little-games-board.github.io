@@ -5,7 +5,7 @@
   <p>注意：太早点会直接失败哦！</p>
 
   <p>可扫描下方二维码进入游戏页面：</p>
-  <img src="./luzhihong/qrcode.png" alt="二维码">
+  <img src="./qrcode.png" alt="二维码">
 
 </body>
 
