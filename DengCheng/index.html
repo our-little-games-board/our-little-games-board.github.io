@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>手机版俄罗斯方块</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <style>
+        body {
+            margin: 0;
+            background: #2c3e50;
+            touch-action: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            font-family: Arial;
+        }
+        #game-container {
+            position: relative;
+            margin-top: 20px;
+        }
+        #game-canvas {
+            background: #34495e;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+        }
+        .control-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            touch-action: manipulation;
+        }
+        #score {
+            font-size: 24px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>俄罗斯方块</h2>
+    <div id="score">得分: 0</div>
+    <div id="game-container">
+        <canvas id="game-canvas"></canvas>
+    </div>
+    <div class="controls">
+        <div class="control-btn" id="left">←</div>
+        <div class="control-btn" id="rotate">↻</div>
+        <div class="control-btn" id="right">→</div>
+        <div class="control-btn" id="down">↓</div>
+    </div>
+
+    <script>
+        const BLOCK_SIZE = 30;
+        const BOARD_WIDTH = 10;
+        const BOARD_HEIGHT = 20;
+        const COLORS = ['#1abc9c', '#f1c40f', '#9b59b6', '#2ecc71', '#e74c3c', '#3498db', '#e67e22'];
+        
+        // 初始化Canvas（优化方案）
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+        const container = document.getElementById('game-container');
+        const setCanvasSize = () => {
+            const width = BLOCK_SIZE * BOARD_WIDTH;
+            const height = BLOCK_SIZE * BOARD_HEIGHT;
+            canvas.width = width;
+            canvas.height = height;
+            canvas.style.width = width + 'px';
+            canvas.style.height = height + 'px';
+        }
+        setCanvasSize();
+        window.addEventListener('resize', setCanvasSize);
+
+        // 游戏核心逻辑（旋转算法优化）
+        let board = Array(BOARD_HEIGHT).fill().map(() => Array(BOARD_WIDTH).fill(0));
+        let currentPiece = null;
+        let score = 0;
+        let gameLoop;
+
+        const SHAPES = [
+            [[1,1,1,1]],                          // I
+            [[1,1],[1,1]],                        // O
+            [[0,1,0],[1,1,1]],                    // T
+            [[1,1,0],[0,1,1]],                    // S
+            [[0,1,1],[1,1,0]],                    // Z
+            [[1,0,0],[1,1,1]],                    // J
+            [[0,0,1],[1,1,1]]                     // L
+        ];
+
+        class Piece {
+            constructor() {
+                const type = Math.floor(Math.random() * 7);
+                this.shape = SHAPES[type];
+                this.color = COLORS[type];
+                this.x = Math.floor(BOARD_WIDTH/2) - 1;
+                this.y = 0;
+            }
+
+            rotate() {
+                const original = this.shape;
+                this.shape = this.shape[0].map((_, i) =>
+                    this.shape.map(row => row[i]).reverse()
+                );
+                if (!this.canMove(0,0)) this.shape = original;
+            }
+
+            canMove(dx, dy) {
+                return this.shape.every((row, y) =>
+                    row.every((cell, x) => {
+                        if (!cell) return true;
+                        const nx = this.x + x + dx;
+                        const ny = this.y + y + dy;
+                        return nx >= 0 && nx < BOARD_WIDTH && 
+                               ny < BOARD_HEIGHT && 
+                               !board[ny]?.[nx];
+                    })
+                );
+            }
+        }
+
+        // 游戏控制（触控优化）
+        const controls = {
+            left:  { action: () => { if(currentPiece.canMove(-1,0)) currentPiece.x-- } },
+            right: { action: () => { if(currentPiece.canMove(1,0)) currentPiece.x++ } },
+            down:  { action: () => { while(currentPiece.canMove(0,1)) currentPiece.y++ } },
+            rotate: { action: () => currentPiece.rotate() }
+        };
+
+        Object.keys(controls).forEach(key => {
+            document.getElementById(key).addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                controls[key].action();
+                draw();
+            });
+        });
+
+        // 绘制逻辑（Canvas优化）
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // 绘制已固定的方块
+            board.forEach((row, y) => {
+                row.forEach((value, x) => {
+                    if (value) {
+                        ctx.fillStyle = value;
+                        ctx.fillRect(x*BLOCK_SIZE, y*BLOCK_SIZE, BLOCK_SIZE-1, BLOCK_SIZE-1);
+                    }
+                });
+            });
+
+            // 绘制当前方块
+            if (currentPiece) {
+                ctx.fillStyle = currentPiece.color;
+                currentPiece.shape.forEach((row, y) => {
+                    row.forEach((cell, x) => {
+                        if (cell) {
+                            ctx.fillRect(
+                                (currentPiece.x + x) * BLOCK_SIZE,
+                                (currentPiece.y + y) * BLOCK_SIZE,
+                                BLOCK_SIZE-1, BLOCK_SIZE-1
+                            );
+                        }
+                    });
+                });
+            }
+        }
+
+        // 游戏循环（优化方案）
+        function update() {
+            if (currentPiece.canMove(0,1)) {
+                currentPiece.y++;
+            } else {
+                lockPiece();
+                clearLines();
+                currentPiece = new Piece();
+                if (!currentPiece.canMove(0,0)) gameOver();
+            }
+            draw();
+        }
+
+        function lockPiece() {
+            currentPiece.shape.forEach((row, y) => {
+                row.forEach((cell, x) => {
+                    if (cell) {
+                        const py = currentPiece.y + y;
+                        const px = currentPiece.x + x;
+                        if (py >= 0) board[py][px] = currentPiece.color;
+                    }
+                });
+            });
+        }
+
+        function clearLines() {
+            let lines = 0;
+            for (let y = BOARD_HEIGHT-1; y >= 0; y--) {
+                if (board[y].every(cell => cell)) {
+                    board.splice(y, 1);
+                    board.unshift(Array(BOARD_WIDTH).fill(0));
+                    lines++;
+                }
+            }
+            if (lines) {
+                score += lines * 100;
+                document.getElementById('score').textContent = `得分: ${score}`;
+            }
+        }
+
+        function gameOver() {
+            clearInterval(gameLoop);
+            alert(`游戏结束！得分: ${score}`);
+            resetGame();
+        }
+
+        function resetGame() {
+            board = Array(BOARD_HEIGHT).fill().map(() => Array(BOARD_WIDTH).fill(0));
+            score = 0;
+            currentPiece = new Piece();
+            document.getElementById('score').textContent = '得分: 0';
+            gameLoop = setInterval(update, 1000);
+        }
+
+        // 启动游戏
+        resetGame();
+    </script>
+</body>
+</html>
