@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>五子棋小游戏</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(to right, #f9f9f9, #e0f7fa);
+      color: #333;
+      line-height: 1.8;
+      padding: 30px;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: #fff;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.8rem;
+      color: #222;
+      margin-bottom: 10px;
+    }
+    .tagline {
+      text-align: center;
+      font-size: 1.2rem;
+      color: #666;
+      margin-bottom: 30px;
+    }
+    section {
+      margin-bottom: 40px;
+    }
+    h2 {
+      font-size: 1.6rem;
+      color: #00796b;
+      margin-bottom: 15px;
+      border-left: 6px solid #26a69a;
+      padding-left: 10px;
+    }
+    img {
+      max-width: 100%;
+      border-radius: 12px;
+      margin: 10px 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    ul {
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 8px;
+    }
+    .play-button {
+      display: inline-block;
+      background: linear-gradient(to right, #26a69a, #00796b);
+      color: white;
+      padding: 14px 30px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.3s ease;
+      margin-top: 20px;
+    }
+    .play-button:hover {
+      background: linear-gradient(to right, #00796b, #004d40);
+    }
+    .center {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>五子棋小游戏</h1>
+    <p class="tagline">对战五子连珠，感受经典策略魅力！</p>
+
+    <section>
+      <h2>🎮 游戏介绍</h2>
+      <p>这是一款由 <strong>小杯彩</strong> 制作的五子棋小游戏，采用 HTML 和 JavaScript 构建，界面简洁、操作流畅，支持双人本地对战。</p>
+      <ul>
+        <li>支持黑白双方轮流落子</li>
+        <li>点击棋盘落子，规则标准</li>
+        <li>适配浏览器和手机扫码使用</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>🖼 游戏界面截图</h2>
+      <img src="game_jietu.png" alt="游戏界面截图">
+    </section>
+
+    <section>
+      <h2>📱 扫码手机试玩</h2>
+      <p>使用微信或浏览器扫一扫二维码，即可在手机上体验：</p>
+      <img src="game_qrcode.png" alt="游戏二维码">
+    </section>
+
+    <section class="center">
+      <h2>🚀 在线试玩</h2>
+      <a href="https://foodchiba.github.io/game/" class="play-button">开始游戏</a>
+    </section>
+  </div>
+</body>
+</html>
