@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <title>井字棋游戏</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #000000, #434343);
+            color: white;
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        #board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            gap: 10px;
+            margin: 20px auto;
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 64px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .cell:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        #status {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        #result {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        #restart-button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #restart-button:hover {
+            background-color: #0056b3;
+        }
+
+        img {
+            display: block;
+            margin: 20px auto;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="text-4xl font-bold text-center mt-8">井字棋游戏</h1>
+    <div id="board">
+        <!-- 这里会通过 JavaScript 动态创建井字棋的单元格 -->
+    </div>
+    <p id="status" class="text-lg mt-4"></p>
+    <p id="result"></p>
+    <button id="restart-button" style="display: none;">再来一局</button>
+    <script>
+        const board = document.getElementById('board');
+        const status = document.getElementById('status');
+        const result = document.getElementById('result');
+        const restartButton = document.getElementById('restart-button');
+        let currentPlayer = 'X';
+        let gameBoard = ['', '', '', '', '', '', '', '', ''];
+        let gameActive = true;
+
+        function createBoard() {
+            for (let i = 0; i < 9; i++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                cell.dataset.index = i;
+                cell.addEventListener('click', handleCellClick);
+                board.appendChild(cell);
+            }
+        }
+
+        function handleCellClick(event) {
+            const index = parseInt(event.target.dataset.index);
+            if (gameBoard[index] === '' && gameActive) {
+                gameBoard[index] = currentPlayer;
+                event.target.textContent = currentPlayer;
+                event.target.style.color = currentPlayer === 'X'? 'black' : 'white';
+                if (checkWin(currentPlayer)) {
+                    const winMessage = `${currentPlayer} 获胜！`;
+                    showResult(winMessage);
+                    gameActive = false;
+                } else if (gameBoard.every(cell => cell!== '')) {
+                    const drawMessage = '平局！';
+                    showResult(drawMessage);
+                    gameActive = false;
+                } else {
+                    currentPlayer = currentPlayer === 'X'? 'O' : 'X';
+                    status.textContent = `${currentPlayer} 的回合`;
+                }
+            }
+        }
+
+        function checkWin(player) {
+            const winPatterns = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8],
+                [0, 3, 6], [1, 4, 7], [2, 5, 8],
+                [0, 4, 8], [2, 4, 6]
+            ];
+            return winPatterns.some(pattern => {
+                return pattern.every(index => gameBoard[index] === player);
+            });
+        }
+
+        function showResult(message) {
+            result.textContent = message;
+            restartButton.style.display = 'block';
+        }
+
+        function restartGame() {
+            currentPlayer = 'X';
+            gameBoard = ['', '', '', '', '', '', '', '', ''];
+            gameActive = true;
+            status.textContent = `${currentPlayer} 的回合`;
+            result.textContent = '';
+            restartButton.style.display = 'none';
+            const cells = document.querySelectorAll('.cell');
+            cells.forEach(cell => {
+                cell.textContent = '';
+            });
+        }
+
+        restartButton.addEventListener('click', restartGame);
+
+        createBoard();
+        status.textContent = `${currentPlayer} 的回合`;
+    </script>
+</body>
+
+</html>
+    
