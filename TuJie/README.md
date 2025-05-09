@@ -6,7 +6,7 @@
 
 点击以下按钮即可开始游戏：
 
-[![开始游戏](https://an-tree.github.io/My_Game/https___an-tree.github.io_My_Game_.png)](https://an-tree.github.io/My_Game/ball_bounce_game.html)
+[开始游戏](https://an-tree.github.io/My_Game/ball_bounce_game.html)
 
 ## 游戏玩法
 
