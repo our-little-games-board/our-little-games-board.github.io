@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>高级井字棋游戏 - 主题 & 动画</title>
+  <style>
+    :root {
+      --primary-bg: linear-gradient(to right, #e0eafc, #cfdef3);
+      --cell-bg: #fff;
+      --cell-hover: #f0f0f0;
+      --x-color: #FF5252;
+      --o-color: #4CAF50;
+      --win-color: #FFF9C4;
+      --btn-primary: #2196F3;
+      --btn-reset: #f44336;
+      --text-color: #333;
+      --status-color: #444;
+      --scoreboard-bg: rgba(255,255,255,0.7);
+    }
+    
+    .theme-classic {
+      --primary-bg: linear-gradient(to right, #e0eafc, #cfdef3);
+      --x-color: #FF5252;
+      --o-color: #4CAF50;
+    }
+    
+    .theme-dark {
+      --primary-bg: linear-gradient(to right, #2c3e50, #4ca1af);
+      --cell-bg: #34495e;
+      --cell-hover: #2c3e50;
+      --x-color: #e74c3c;
+      --o-color: #2ecc71;
+      --win-color: #f39c12;
+      --btn-primary: #3498db;
+      --btn-reset: #e74c3c;
+      --text-color: #ecf0f1;
+      --status-color: #bdc3c7;
+      --scoreboard-bg: rgba(0,0,0,0.3);
+    }
+    
+    .theme-pastel {
+      --primary-bg: linear-gradient(to right, #ffcce6, #d9f2e6);
+      --cell-bg: #fff9f9;
+      --cell-hover: #f0e6ff;
+      --x-color: #ff8fab;
+      --o-color: #8fd3f4;
+      --win-color: #fbe7c6;
+      --btn-primary: #a0e7e5;
+      --btn-reset: #ffaaa5;
+      --text-color: #5e5e5e;
+      --status-color: #7e7e7e;
+      --scoreboard-bg: rgba(255,255,255,0.5);
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--primary-bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+      margin: 0;
+      padding-top: 20px;
+      color: var(--text-color);
+      transition: background 0.5s ease;
+    }
+    
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .settings {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .game-mode, .theme-selector {
+      display: flex;
+      gap: 10px;
+    }
+    
+    button {
+      margin: 5px;
+      padding: 8px 16px;
+      font-size: 0.9em;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    
+    .mode-btn {
+      background-color: var(--btn-primary);
+    }
+    
+    .theme-btn {
+      background-color: var(--btn-primary);
+      opacity: 0.7;
+    }
+    
+    .theme-btn.active {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+    
+    .reset-btn {
+      background-color: var(--btn-reset);
+    }
+    
+    .scoreboard {
+      display: flex;
+      justify-content: space-around;
+      width: 300px;
+      margin: 15px 0;
+      font-size: 1.2em;
+      background-color: var(--scoreboard-bg);
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .game-container {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      grid-template-rows: repeat(3, 100px);
+      gap: 10px;
+      margin: 10px 0;
+      perspective: 1000px;
+    }
+    
+    .cell {
+      background-color: var(--cell-bg);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5em;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      transform-style: preserve-3d;
+    }
+    
+    .cell:hover {
+      background-color: var(--cell-hover);
+      transform: scale(1.05) rotateY(5deg);
+    }
+    
+    .cell.x {
+      color: var(--x-color);
+    }
+    
+    .cell.o {
+      color: var(--o-color);
+    }
+    
+    .winning-cell {
+      animation: pulse 1s infinite, glow 2s infinite;
+      background-color: var(--win-color);
+    }
+    
+    #status {
+      margin: 15px 0;
+      font-size: 1.5em;
+      color: var(--status-color);
+      min-height: 2em;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    @keyframes pop {
+      0% { transform: scale(0.5) rotateY(90deg); opacity: 0; }
+      50% { transform: scale(1.1) rotateY(0); }
+      100% { transform: scale(1) rotateY(0); opacity: 1; }
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    @keyframes glow {
+      0% { box-shadow: 0 0 5px rgba(255,255,255,0.5); }
+      50% { box-shadow: 0 0 20px rgba(255,255,255,0.8); }
+      100% { box-shadow: 0 0 5px rgba(255,255,255,0.5); }
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .status-animation {
+      animation: bounce 0.5s ease;
+    }
+    
+    .cell-animation {
+      animation: pop 0.5s ease;
+    }
+    
+    .theme-transition {
+      transition: all 0.5s ease;
+    }
+  </style>
+</head>
+<body class="theme-classic">
+  <h1>井字棋</h1>
+  
+  <div class="settings">
+    <div class="game-mode">
+      <button class="mode-btn" onclick="setGameMode('human')">双人对战</button>
+      <button class="mode-btn" onclick="setGameMode('ai')">对战AI</button>
+    </div>
+    
+    <div class="theme-selector">
+      <button class="theme-btn active" onclick="setTheme('classic')">经典</button>
+      <button class="theme-btn" onclick="setTheme('dark')">暗黑</button>
+      <button class="theme-btn" onclick="setTheme('pastel')">柔色</button>
+    </div>
+  </div>
+  
+  <div class="scoreboard">
+    <div>玩家 X: <span id="scoreX">0</span></div>
+    <div>平局: <span id="scoreTie">0</span></div>
+    <div>玩家 O: <span id="scoreO">0</span></div>
+  </div>
+  
+  <div class="game-container" id="board">
+    <!-- 9 个格子 -->
+  </div>
+  
+  <div id="status">轮到玩家 X</div>
+  <button class="reset-btn" onclick="resetGame()">重新开始</button>
+  
+  <audio id="clickSound" src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3"></audio>
+  <audio id="winSound" src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3"></audio>
+  <audio id="themeSound" src="https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3"></audio>
+  
+  <script>
+    const board = document.getElementById('board');
+    const status = document.getElementById('status');
+    let cells = [];
+    let currentPlayer = 'X';
+    let gameEnded = false;
+    let gameMode = 'human';
+    let scores = { X: 0, O: 0, tie: 0 };
+    let currentTheme = 'classic';
+    
+    // 初始化格子
+    for (let i = 0; i < 9; i++) {
+      const cell = document.createElement('div');
+      cell.classList.add('cell');
+      cell.addEventListener('click', () => handleClick(cell, i));
+      board.appendChild(cell);
+      cells.push(cell);
+    }
+    
+    function setGameMode(mode) {
+      gameMode = mode;
+      resetGame();
+      animateStatus(mode === 'ai' ? '你(X)对战AI(O)' : '双人对战(X先手)');
+      playSound('clickSound');
+    }
+    
+    function setTheme(theme) {
+      document.body.className = `theme-${theme} theme-transition`;
+      currentTheme = theme;
+      
+      // 更新主题按钮状态
+      document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      
+      playSound('themeSound');
+    }
+    
+    function handleClick(cell, index) {
+      if (cell.textContent !== '' || gameEnded) return;
+      
+      playSound('clickSound');
+      
+      cell.textContent = currentPlayer;
+      cell.classList.add(currentPlayer.toLowerCase(), 'cell-animation');
+      
+      if (checkWinner()) {
+        playSound('winSound');
+        animateStatus(`🎉 恭喜玩家 ${currentPlayer} 获胜！`);
+        scores[currentPlayer]++;
+        updateScoreboard();
+        gameEnded = true;
+        highlightWinningCells();
+        return;
+      }
+      
+      if (cells.every(c => c.textContent !== '')) {
+        animateStatus('🤝 生活不是打打杀杀，以和为贵，平局！');
+        scores.tie++;
+        updateScoreboard();
+        gameEnded = true;
+        return;
+      }
+      
+      currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+      const statusText = gameMode === 'ai' && currentPlayer === 'O' 
+        ? '等待AI深度思考中...' 
+        : `轮到玩家 ${currentPlayer}`;
+      animateStatus(statusText);
+      
+      // 添加AI回合
+      if (gameMode === 'ai' && currentPlayer === 'O') {
+        makeAIMove();
+      }
+    }
+    
+    function makeAIMove() {
+      setTimeout(() => {
+        // 简单AI - 随机选择空位
+        const emptyCells = cells.filter(cell => cell.textContent === '');
+        if (emptyCells.length > 0) {
+          const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+          const index = cells.indexOf(randomCell);
+          handleClick(randomCell, index);
+        }
+      }, 500 + Math.random() * 1000);
+    }
+    
+    function checkWinner() {
+      const lines = [
+        [0,1,2], [3,4,5], [6,7,8],
+        [0,3,6], [1,4,7], [2,5,8],
+        [0,4,8], [2,4,6]
+      ];
+      return lines.some(([a,b,c]) => {
+        return cells[a].textContent &&
+               cells[a].textContent === cells[b].textContent &&
+               cells[a].textContent === cells[c].textContent;
+      });
+    }
+    
+    function highlightWinningCells() {
+      const lines = [
+        [0,1,2], [3,4,5], [6,7,8],
+        [0,3,6], [1,4,7], [2,5,8],
+        [0,4,8], [2,4,6]
+      ];
+      
+      for (const [a,b,c] of lines) {
+        if (cells[a].textContent &&
+            cells[a].textContent === cells[b].textContent &&
+            cells[a].textContent === cells[c].textContent) {
+          cells[a].classList.add('winning-cell');
+          cells[b].classList.add('winning-cell');
+          cells[c].classList.add('winning-cell');
+          break;
+        }
+      }
+    }
+    
+    function updateScoreboard() {
+      document.getElementById('scoreX').textContent = scores.X;
+      document.getElementById('scoreO').textContent = scores.O;
+      document.getElementById('scoreTie').textContent = scores.tie;
+      
+      // 分数更新动画
+      const scoreElements = document.querySelectorAll('.scoreboard span');
+      scoreElements.forEach(el => {
+        el.classList.add('status-animation');
+        setTimeout(() => el.classList.remove('status-animation'), 500);
+      });
+    }
+    
+    function animateStatus(text) {
+      status.classList.add('status-animation');
+      setTimeout(() => {
+        status.textContent = text;
+        status.classList.remove('status-animation');
+      }, 250);
+    }
+    
+    function playSound(soundId) {
+      const sound = document.getElementById(soundId);
+      sound.currentTime = 0;
+      sound.play();
+    }
+    
+    function resetGame() {
+      // 格子消失动画
+      cells.forEach((cell, index) => {
+        setTimeout(() => {
+          cell.style.transform = 'scale(0) rotate(180deg)';
+          cell.style.opacity = '0';
+        }, index * 50);
+      });
+      
+      // 重置游戏状态
+      setTimeout(() => {
+        cells.forEach(cell => {
+          cell.textContent = '';
+          cell.classList.remove('x', 'o', 'winning-cell', 'cell-animation');
+          cell.style.transform = '';
+          cell.style.opacity = '1';
+        });
+        
+        currentPlayer = 'X';
+        const statusText = gameMode === 'ai' ? '你(X)对战AI(O)' : '轮到玩家 X';
+        animateStatus(statusText);
+        gameEnded = false;
+        
+        // 格子出现动画
+        cells.forEach((cell, index) => {
+          setTimeout(() => {
+            cell.classList.add('cell-animation');
+          }, index * 50);
+        });
+      }, 500);
+    }
+    
+    // 初始化游戏
+    setGameMode('human');
+  </script>
+</body>
+</html>
