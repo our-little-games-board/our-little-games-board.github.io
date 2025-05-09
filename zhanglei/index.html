@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>汉诺塔小游戏</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 800px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #4a6fa5;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+        }
+        
+        .section h2 {
+            color: #4a6fa5;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+        
+        .section p {
+            line-height: 1.6;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .feature-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .feature-item {
+            background-color: #f0f4f8;
+            border-radius: 10px;
+            padding: 10px 15px;
+            font-size: 0.9rem;
+            color: #4a6fa5;
+            flex: 1 1 calc(50% - 15px);
+            box-sizing: border-box;
+        }
+        
+        .game-rules {
+            text-align: left;
+            background-color: #f0f4f8;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .game-rules h3 {
+            color: #4a6fa5;
+            margin-bottom: 10px;
+        }
+        
+        .game-rules ul {
+            padding-left: 20px;
+        }
+        
+        .game-rules li {
+            margin-bottom: 8px;
+        }
+        
+        .image-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .qr-code-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .qr-code-container img {
+            max-width: 200px;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .demo-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #4a6fa5;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .demo-link:hover {
+            background-color: #3a5a80;
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 600px) {
+            .feature-item {
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>汉诺塔小游戏</h1>
+        
+        <div class="section">
+            <h2>游戏介绍</h2>
+            <p>汉诺塔(Hanoi)是一款经典的益智游戏，源于印度古老传说。这款网页版汉诺塔小游戏实现了完整的游戏功能，界面美观，操作简单，适合所有年龄段的玩家。</p>
+        </div>
+        
+        <div class="section">
+            <h2>游戏特色</h2>
+            <div class="feature-list">
+                <div class="feature-item">🌟 精美界面：渐变背景、木质纹理柱子和彩色圆盘</div>
+                <div class="feature-item">🎮 多种难度：3-10个圆盘可选，挑战不同难度级别</div>
+                <div class="feature-item">⏱ 步数统计：实时显示移动步数，记录你的成绩</div>
+                <div class="feature-item">🏆 胜利提示：完成游戏后显示祝贺信息</div>
+                <div class="feature-item">🔄 重新开始：随时重置当前游戏</div>
+                <div class="feature-item">🚪 返回功能：可返回主菜单更换难度</div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>游戏规则</h2>
+            <div class="game-rules">
+                <h3>目标</h3>
+                <p>将所有圆盘从第一个柱子移动到第三个柱子</p>
+                
+                <h3>规则</h3>
+                <ul>
+                    <li>每次只能移动一个圆盘</li>
+                    <li>大圆盘不能放在小圆盘上</li>
+                    <li>可以使用中间的柱子作为辅助</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>游戏截图</h2>
+            <div class="image-container">
+                <img src="https://github.com/user-attachments/assets/a3b375de-5eca-404e-a4b5-035a5357c8fc" alt="汉诺塔游戏截图">
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>扫码体验</h2>
+            <div class="qr-code-container">
+                <img src="https://github.com/user-attachments/assets/92ebbfaa-44d7-444d-a7a0-e02b72644b13" alt="二维码">
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>在线演示</h2>
+            <a href="https://zzzhc-meng.github.io/mengi/" class="demo-link">点击查看在线演示</a>
+        </div>
+    </div>
+</body>
+</html>
