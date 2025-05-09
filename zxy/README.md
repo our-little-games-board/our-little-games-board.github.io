@@ -3,6 +3,6 @@
 
 可扫描下方二维码进入游戏页面：
 
-![image](https://github.com/user-attachments/assets/458c4ed5-1f6d-413c-885e-1da4dab7fa9b)
+![image](https://github.com/our-little-games-board/our-little-games-board.github.io/blob/main/zxy/https___zxy88888888-zxy.github.io_xiaoyouxi_.png)
 
 
