@@ -12,8 +12,11 @@
 ## 游戏界面截图
 
 
-![游戏截图1](jetu.png)
-![游戏截图2](erweima.png)
+## 二维码
+![二维码截图](erweima.jpg)
+
+## 游戏界面
+![游戏截图](jietu.jpg)
 
 
 ## About
