@@ -14,7 +14,9 @@
 <p align="center">
   <img src="https17750977756.github.iowll.png" alt="游戏二维码" width="180" />
 </p>
-
+<p align="center">
+  <img src="游戏截图.png" alt="游戏截图" width="180" />
+</p>
 ---
 
 ## 🎮 游戏玩法
