@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reaction Speed Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        #gameArea {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+        .target {
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            position: absolute;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>反应速度游戏</h1>
+    <p>尽快点击红色圆圈！</p>
+    <div id="gameArea"></div>
+    <p id="score">得分: 0</p>
+    <script>
+        const gameArea = document.getElementById('gameArea');
+        const scoreDisplay = document.getElementById('score');
+        let score = 0;
+
+        function createTarget() {
+            const target = document.createElement('div');
+            target.classList.add('target');
+            target.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+            target.style.left = Math.random() * (window.innerWidth - 50) + 'px';
+            target.addEventListener('click', () => {
+                score++;
+                scoreDisplay.textContent = 'Score: ' + score;
+                target.style.backgroundColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+                target.remove();
+                let timeLeft = 30;
+                let timerDisplay = document.getElementById('timerDisplay');
+                if (!timerDisplay) {
+                    timerDisplay = document.createElement('p');
+                    timerDisplay.id = 'timerDisplay';
+                    document.body.insertBefore(timerDisplay, gameArea);
+                }
+                timerDisplay.textContent = `剩余时间: ${timeLeft} 秒`;
+                
+                const timer = setInterval(() => {
+                    timeLeft--;
+                    timerDisplay.textContent = `剩余时间: ${timeLeft} 秒`;
+                    if (timeLeft <= 0) {
+                        clearInterval(timer);
+                        alert(`游戏结束！您的得分是: ${score}`);
+                        location.reload();
+                    }
+                }, 1000);
+                
+                createTarget();
+            });
+            gameArea.appendChild(target);
+        }
+
+        createTarget();
+    </script>
+</body>
+</html>
