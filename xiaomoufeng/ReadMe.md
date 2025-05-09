@@ -12,5 +12,8 @@
 ## 游戏界面截图
 
 
+![游戏截图1](jetu.png)
+![游戏截图2](erweima.png)
+
 
 ## About
