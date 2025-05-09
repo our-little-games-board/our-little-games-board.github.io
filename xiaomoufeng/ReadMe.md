@@ -12,12 +12,19 @@
 ## 游戏界面截图
 
 
-## 二维码
-![二维码截图](erweima.jpg)
-
 ## 游戏界面
 ![游戏截图](jietu.jpg)
 
+## 二维码
+![二维码截图](erweima.jpg)
 
-## About
-<a href="https://testwwsq.github.io/" target="_blank"><button>点击进入游戏</button></a>
+
+
+
+## 在线试玩
+
+点击下面按钮或链接，即可在线体验：
+
+[🎮 点击试玩](https://testwwsq.github.io/)  
+或  
+<a href="https://testwwsq.github.io/" target="_blank"><button style="background-color: #2ea44f; color: white; padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer;">立即体验</button></a>
