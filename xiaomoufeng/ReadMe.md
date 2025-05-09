@@ -20,4 +20,4 @@
 
 
 ## About
-[点击访问](index.html)
+<a href="https://testwwsq.github.io/" target="_blank"><button>点击进入游戏</button></a>
